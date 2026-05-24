@@ -30,7 +30,7 @@ and interacts by typing numbers and text.
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/ghosthassanekabore18-jp/deliveryx.git
+git clone https://github.com/ghosthassanekabore18-jpg/deliveryx.git
 ```
 
 2. **Move into the project folder**
