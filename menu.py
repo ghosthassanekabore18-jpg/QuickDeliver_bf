@@ -18,9 +18,9 @@ from utils import (validate_phone, validate_email, validate_weight,
 # =============================================================================
 
 def display_main_menu():
-    """Displays the DeliveryX main menu with all available options."""
+    """Displays the QuickDeliver_BF main menu with all available options."""
     print("\n" + "=" * 60)
-    print("   DELIVERYX — MAIN MENU")
+    print("   QuickDeliver_BF — MAIN MENU")
     print("=" * 60)
     print("  1. Add a new client")
     print("  2. Add a new courier")
