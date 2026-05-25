@@ -1,7 +1,7 @@
 # =============================================================================
 # QuickDeliver_BF — DELIVERY MANAGEMENT SYSTEM
 # main.py — Entry point of the application
-# Member 6 : Hassane
+# Code by Hassane
 # Burkina Institute of Technology — Programming I with Python
 # =============================================================================
 
@@ -22,7 +22,7 @@ from menu import (
 
 def main():
     """
-    Main function that launches the QuickDeliver_BF application.
+    Main function that launches the  application.
     Initialises the data lists and runs the main menu loop
     until the user decides to quit.
     """
