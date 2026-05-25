@@ -1,7 +1,7 @@
-# deliveryx
+# QuickDeliver_BF
 A python console application  to manage deliveries, client, couriers and parcels for small transport business
 
-# 🚚 DeliveryX
+# 🚚 QuickDeliver_BF
 
 > A Python console application built as part of the Programming I with Python course.
 > by first year students in computer-science of Burkina Institute of Technology (BIT) — May 2026.
@@ -10,7 +10,7 @@ A python console application  to manage deliveries, client, couriers and parcels
 
 ## 📌 Description
 
-DeliveryX is a console-based delivery management application built in Python.
+QuickDeliver_BF is a console-based delivery management application built in Python.
 It allows a transport company to register clients and couriers, create and track deliveries,
 calculate shipping fees automatically, and generate activity reports — all saved to local
 text files for data persistence.
@@ -30,12 +30,12 @@ and interacts by typing numbers and text.
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/ghosthassanekabore18-jpg/deliveryx.git
+git clone https://github.com/ghosthassanekabore18-jpg/QuickDeliver_BF.git
 ```
 
 2. **Move into the project folder**
 ```bash
-cd deliveryx
+cd QuickDeliver_BF
 ```
 
 3. **Run the program**
