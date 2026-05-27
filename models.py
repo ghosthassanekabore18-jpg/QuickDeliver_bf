@@ -1,0 +1,100 @@
+class Courier(Person):
+    """
+    Represents a courier who transports parcels.
+    Inherits from Person — demonstrates Inheritance and Polymorphism.
+    """
+
+    def __init__(self, last_name: str, first_name: str, phone: str,
+                 email: str, vehicle: str, zone: str):
+        """
+        Initialises a courier with personal and professional information.
+
+        Args:
+            last_name (str): The courier's last name.
+            first_name (str): The courier's first name.
+            phone (str): The courier's phone number.
+            email (str): The courier's email address.
+            vehicle (str): Vehicle type (motorbike, car, bicycle...).
+            zone (str): The geographical delivery zone.
+        """
+        # Call the parent constructor — inheritance
+        super().__init__(last_name, first_name, phone, email)
+
+        # Courier-specific private attributes
+        self._vehicle: str = vehicle
+        self._zone: str = zone
+        self._courier_id: str = str(uuid.uuid4())[:8].upper()  # auto-generated unique ID
+        self._completed_deliveries: list = []                   # list of delivery IDs
+        self._available: bool = True                            # available by default
+
+    # --- Getters ---
+
+    def get_courier_id(self) -> str:
+        """Returns the unique identifier of the courier."""
+        return self._courier_id
+
+    def get_vehicle(self) -> str:
+        """Returns the vehicle type used by the courier."""
+        return self._vehicle
+
+    def get_zone(self) -> str:
+        """Returns the delivery zone of the courier."""
+        return self._zone
+
+    def is_available(self) -> bool:
+        """Returns True if the courier is available, False otherwise."""
+        return self._available
+
+    # --- Setters ---
+
+    def set_availability(self, available: bool):
+        """
+        Updates the availability status of the courier.
+
+        Args:
+            available (bool): True if available, False if busy.
+        """
+        self._available = available
+
+    # --- Methods ---
+
+    def add_delivery(self, delivery_id: str):
+        """
+        Records a completed delivery in the courier's history.
+
+        Args:
+            delivery_id (str): The unique ID of the completed delivery.
+        """
+        self._completed_deliveries.append(delivery_id)
+
+    def display_info(self):
+        """
+        Displays the full information of the courier.
+        Overrides Person.display_info() — demonstrates Polymorphism.
+        """
+        # Availability shown as readable text
+        status = "Available" if self._available else "Busy"
+
+        print(f"  Courier ID  : {self._courier_id}")
+        print(f"  Name        : {self._first_name} {self._last_name}")
+        print(f"  Phone       : {self._phone}")
+        print(f"  Email       : {self._email}")
+        print(f"  Vehicle     : {self._vehicle}")
+        print(f"  Zone        : {self._zone}")
+        print(f"  Status      : {status}")
+        print(f"  Deliveries  : {len(self._completed_deliveries)}")
+
+    def display_completed_deliveries(self):
+        """Displays all delivery IDs completed by this courier."""
+        if not self._completed_deliveries:
+            print("  No deliveries completed yet.")
+        else:
+            print(f"  Deliveries by {self._first_name} {self._last_name}:")
+            # for loop to list each delivery
+            for index, delivery_id in enumerate(self._completed_deliveries, start=1):
+                print(f"    {index}. Delivery ID : {delivery_id}")
+
+    def __str__(self) -> str:
+        """Returns a short string representation of the courier."""
+        availability = "Available" if self._available else "Busy"
+        return f"[COURIER] {self._first_name} {self._last_name} — {self._zone} — {availability}"
