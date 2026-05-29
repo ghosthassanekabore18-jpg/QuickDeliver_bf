@@ -92,6 +92,61 @@ QuickDeliver_BF/
 
 > 💡 The `.txt` files are created automatically by the program the first time
 > data is saved. You do not need to create them manually.
+---
+
+## 🧱 OOP Structure
+
+### `Person` — Parent Class
+Represents any person in the system with their basic personal information.
+- **Attributes :** `_last_name`, `_first_name`, `_phone`, `_email`
+- **Key methods :** `get_last_name()`, `get_first_name()`, `display_info()`, `__str__()`
+- **Inheritance :** None — this is the root class
+
+---
+
+### `Client` — Inherits from `Person`
+Represents a client who places delivery orders.
+- **Additional attributes :** `_address`, `_client_id`, `_order_history`
+- **Key methods :** `add_order()`, `display_order_history()`, `display_info()`
+- **Inheritance :** extends `Person`
+
+---
+
+### `Courier` — Inherits from `Person`
+Represents a courier who transports parcels.
+- **Additional attributes :** `_vehicle`, `_zone`, `_courier_id`, `_available`, `_completed_deliveries`
+- **Key methods :** `is_available()`, `set_availability()`, `add_delivery()`, `display_info()`
+- **Inheritance :** extends `Person`
+
+---
+
+### `Parcel`
+Represents a parcel to be delivered with its physical characteristics.
+- **Attributes :** `_parcel_id`, `_description`, `_weight`, `_dimensions`, `_fragile`, `_creation_date`
+- **Key methods :** `calculate_volume()`, `calculate_base_fee()`, `mark_as_fragile()`
+- **Inheritance :** None
+
+---
+
+### `Delivery`
+Represents a complete delivery — links a Client, a Courier and a Parcel together.
+- **Attributes :** `_delivery_id`, `_client`, `_courier`, `_parcel`, `_status`, `_creation_date`, `_delivery_date`, `_total_fee`
+- **Key methods :** `update_status()`, `mark_as_delivered()`, `calculate_total_fee()`, `display_details()`
+- **Inheritance :** None
+
+---
+
+### The 4 OOP Principles in DeliveryX
+
+| Principle | Where it appears in the code |
+|---|---|
+| **Encapsulation** | All attributes are private (`_weight`, `_phone`...) and only accessible via getters and setters |
+| **Inheritance** | `Client` and `Courier` both inherit from `Person` using `super().__init__()` |
+| **Polymorphism** | `display_info()` behaves differently in `Person`, `Client` and `Courier` |
+| **Abstraction** | `create_delivery()` hides all internal complexity behind a single clean function call |
+
+---
+
 
 
 
