@@ -30,7 +30,7 @@ and interacts by typing numbers and text.
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/ghosthassanekabore18-jpg/QuickDeliver_BF.git
+git clone https://github.com/hassane-labs/QuickDeliver_bf.git
 ```
 
 2. **Move into the project folder**
