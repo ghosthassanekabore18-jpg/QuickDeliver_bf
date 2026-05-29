@@ -1,4 +1,17 @@
- =============================================================================
+# QUICKDELIVER_BF — DELIVERY MANAGEMENT SYSTEM
+# models.py — All classes : Person, Client, Courier, Parcel, Delivery
+# Burkina Institute of Technology 
+
+import datetime
+import uuid
+
+VALID_STATUSES = ("pending", "in_transit", "delivered", "cancelled")
+BASE_RATE_PER_KG: float = 500.0     # FCFA per kilogram
+MINIMUM_FEE: float = 1000.0         # Minimum shipping fee in FCFA
+FRAGILE_SURCHARGE: float = 0.20     # 20% surcharge for fragile parcels
+
+
+# =============================================================================
 # PARENT CLASS — Person
 # Coded by : Nimatou
 # =============================================================================
@@ -31,7 +44,7 @@ class Person:
             first_name (str): The person's first name.
             phone (str): The person's phone number.
             email (str): The person's email address.
-        """
+        
         # Private attributes — encapsulation
         self._last_name: str = last_name
         self._first_name: str = first_name
@@ -90,7 +103,13 @@ class Person:
     def __str__(self) -> str:
         """Returns a short string representation of the person."""
         return f"{self._first_name} {self._last_name} — {self._phone}"
- 
+
+
+
+
+# CHILD CLASS : Courier
+# Coded by : Ezekiel
+# Inherits from : Person
 
 
 
