@@ -34,6 +34,80 @@ def display_main_menu():
     print("  0. Quit")
     print("-" * 60)
     
+# CLIENT FUNCTIONS — By Cheick 
+
+
+
+def input_client(clients: list) -> Client:
+    """
+    Prompts the user to enter information for a new client
+    and returns the created Client object.
+
+    Args:
+        clients (list): The existing list of clients.
+
+    Returns:
+        Client: The newly created Client object.
+    """
+    display_title("Add a New Client")
+
+    # Collect last name — cannot be empty
+    last_name: str = input("  Last name    : ").strip()
+    while not last_name:
+        print("  Last name cannot be empty.")
+        last_name = input("  Last name    : ").strip()
+
+    # Collect first name — cannot be empty
+    first_name: str = input("  First name   : ").strip()
+    while not first_name:
+        print("   First name cannot be empty.")
+        first_name = input("  First name   : ").strip()
+
+    # Collect and validate phone number (exactly 8 digits)
+    phone: str = input("  Phone (8 digits) : ").strip()
+    while not validate_phone(phone):
+        print("   Phone number must contain exactly 8 digits.")
+        phone = input("  Phone (8 digits) : ").strip()
+
+    # Collect and validate email address
+    email: str = input("  Email        : ").strip()
+    while not validate_email(email):
+        print("   Invalid email — must contain '@' and '.'.")
+        email = input("  Email        : ").strip()
+
+    # Collect address — cannot be empty
+    address: str = input("  Address      : ").strip()
+    while not address:
+        print("  Address cannot be empty.")
+        address = input("  Address      : ").strip()
+
+    # Create and return the new Client object
+    new_client = Client(last_name, first_name, phone, email, address)
+    print(f"\n  Client {first_name} {last_name} added successfully! (ID: {new_client.get_client_id()})")
+    return new_client
+
+
+def display_all_clients(clients: list):
+    """
+    Displays the full list of all registered clients.
+    Shows a message if no clients are registered yet.
+
+    Args:
+        clients (list): The list of all Client objects.
+    """
+    display_title("All Registered Clients")
+
+    # Check if the list is empty
+    if not clients:
+        print("  No clients registered yet.")
+        return
+
+    # for loop to display each client's information
+    for index, client in enumerate(clients, start=1):
+        print(f"\n  --- Client #{index} ---")
+        client.display_info()
+        display_separator()
+
 
 
 # =============================================================================
