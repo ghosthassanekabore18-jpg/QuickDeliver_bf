@@ -4,7 +4,6 @@
 #coded by Jeanine
 
 
-
 import datetime
     #import datetime — Import the modulus datetime that permit to manipulate the dates and hours from python standard library 
 from models import Delivery
