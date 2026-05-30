@@ -389,3 +389,269 @@ if __name__ == "__main__":
     print()
     print(str(client1))
     print(str(client2))
+
+
+
+
+
+
+# PARCEL CLASS
+# Coded by Nina
+
+
+
+
+
+class Parcel:
+    """
+    Represents a parcel to be delivered with its physical characteristics.
+    Demonstrates : Encapsulation and Abstraction.
+    """
+
+    def __init__(self, description: str, weight: float, dimensions: tuple):
+        """
+        Initialises a parcel with description, weight and dimensions.
+
+        Args:
+            description (str): Description of the parcel contents.
+            weight (float): Weight of the parcel in kilograms.
+            dimensions (tuple): Dimensions as (length, width, height) in cm.
+        """
+        # Private attributes — encapsulation
+        self._parcel_id: str = str(uuid.uuid4())[:8].upper()   # auto-generated unique ID
+        self._description: str = description
+        self._weight: float = weight
+        self._dimensions: tuple = dimensions                    # (length, width, height) in cm
+        self._fragile: bool = False                             # not fragile by default
+        self._creation_date: datetime.date = datetime.date.today()
+
+    # Getters 
+
+    def get_parcel_id(self) -> str:
+        """Returns the unique identifier of the parcel."""
+        return self._parcel_id
+
+    def get_weight(self) -> float:
+        """Returns the weight of the parcel in kilograms."""
+        return self._weight
+
+    def get_dimensions(self) -> tuple:
+        """Returns the dimensions of the parcel as a (length, width, height) tuple."""
+        return self._dimensions
+
+    def get_description(self) -> str:
+        """Returns the description of the parcel contents."""
+        return self._description
+
+    def is_fragile(self) -> bool:
+        """Returns True if the parcel is marked as fragile, False otherwise."""
+        return self._fragile
+
+    #  Methods 
+
+    def mark_as_fragile(self):
+        """Marks the parcel as fragile — a 20% surcharge will be applied."""
+        self._fragile = True
+
+    def calculate_volume(self) -> float:
+        """
+        Calculates the volume of the parcel from its dimensions tuple.
+
+        Returns:
+            float: Volume in cm³ (length x width x height).
+        """
+        # Unpack the dimensions tuple into three variables
+        length, width, height = self._dimensions
+        return length * width * height
+
+    def calculate_base_fee(self) -> float:
+        """
+        Calculates the base shipping fee based on parcel weight.
+        Rate is 500 FCFA per kg with a minimum of 1000 FCFA.
+
+        Returns:
+            float: Base fee in FCFA.
+        """
+        # max() ensures the minimum fee is always respected
+        return max(MINIMUM_FEE, self._weight * BASE_RATE_PER_KG)
+
+    def display_info(self):
+        """Displays all physical information about the parcel."""
+        fragile_label = "Yes" if self._fragile else "No"
+        print(f"  Parcel ID   : {self._parcel_id}")
+        print(f"  Description : {self._description}")
+        print(f"  Weight      : {self._weight} kg")
+        print(f"  Dimensions  : {self._dimensions[0]}cm x {self._dimensions[1]}cm x {self._dimensions[2]}cm")
+        print(f"  Volume      : {self.calculate_volume()} cm³")
+        print(f"  Fragile     : {fragile_label}")
+        print(f"  Created on  : {self._creation_date}")
+
+    def __str__(self) -> str:
+        """Returns a short string representation of the parcel."""
+        return f"[PARCEL] {self._parcel_id} — {self._description} — {self._weight}kg"
+
+
+
+# DELIVERY CLASS
+# Coded by Nina
+
+
+
+class Delivery:
+    """
+    Represents a complete delivery linking a Client, a Courier and a Parcel.
+    Manages the full lifecycle from creation to completion.
+    Demonstrates : Abstraction — complex logic hidden behind clean methods.
+    """
+
+    def __init__(self, client: Client, courier: Courier, parcel: Parcel,
+                 pickup_address: str, drop_address: str):
+        """
+        Initialises a delivery with all associated objects and addresses.
+
+        Args:
+            client (Client): The client placing the order.
+            courier (Courier): The courier assigned to this delivery.
+            parcel (Parcel): The parcel to be delivered.
+            pickup_address (str): The address where the parcel is collected.
+            drop_address (str): The address where the parcel is delivered.
+        """
+        # Auto-generated unique ID
+        self._delivery_id: str = str(uuid.uuid4())[:8].upper()
+
+        # Linked objects
+        self._client: Client = client
+        self._courier: Courier = courier
+        self._parcel: Parcel = parcel
+
+        # Addresses
+        self._pickup_address: str = pickup_address
+        self._drop_address: str = drop_address
+
+        # Status starts as "pending" — first value of the VALID_STATUSES tuple
+        self._status: str = VALID_STATUSES[0]
+
+        # Dates
+        self._creation_date: datetime.datetime = datetime.datetime.now()
+        self._delivery_date = None  # set only when marked as delivered
+
+        # Fee calculated later
+        self._total_fee: float = 0.0
+
+    #  Getters
+
+    def get_delivery_id(self) -> str:
+        """Returns the unique identifier of the delivery."""
+        return self._delivery_id
+
+    def get_status(self) -> str:
+        """Returns the current status of the delivery."""
+        return self._status
+
+    def get_total_fee(self) -> float:
+        """Returns the total shipping fee for this delivery."""
+        return self._total_fee
+
+    def get_client(self) -> Client:
+        """Returns the client associated with this delivery."""
+        return self._client
+
+    def get_courier(self) -> Courier:
+        """Returns the courier assigned to this delivery."""
+        return self._courier
+
+    def get_parcel(self) -> Parcel:
+        """Returns the parcel associated with this delivery."""
+        return self._parcel
+
+    # --- Methods ---
+
+    def update_status(self, new_status: str):
+        """
+        Updates the delivery status if the new value is valid.
+
+        Args:
+            new_status (str): Must be one of VALID_STATUSES.
+        """
+        # Check the new status is in the VALID_STATUSES tuple
+        if new_status in VALID_STATUSES:
+            self._status = new_status
+            print(f"  Status updated to : {new_status}")
+        else:
+            print(f"  ❌ Invalid status. Choose from : {VALID_STATUSES}")
+
+    def mark_as_delivered(self):
+        """Marks the delivery as delivered and records the exact delivery date and time."""
+        self._status = "delivered"
+        self._delivery_date = datetime.datetime.now()   # record exact time of delivery
+        print(f"  Delivery {self._delivery_id} marked as delivered.")
+
+    def calculate_total_fee(self) -> float:
+        """
+        Calculates the total fee based on parcel weight.
+        Adds a 20% surcharge if the parcel is fragile.
+
+        Returns:
+            float: Total fee in FCFA.
+        """
+        base_fee: float = self._parcel.calculate_base_fee()
+
+        # Apply fragile surcharge if needed
+        if self._parcel.is_fragile():
+            total = base_fee * (1 + FRAGILE_SURCHARGE)  # +20%
+        else:
+            total = base_fee
+
+        self._total_fee = total
+        return self._total_fee
+
+    def display_details(self):
+        """Displays the full details of the delivery — client, courier, parcel, status and fee."""
+        print(f"\n  {'='*45}")
+        print(f"  DELIVERY ID  : {self._delivery_id}")
+        print(f"  Status       : {self._status.upper()}")
+        print(f"  Created      : {self._creation_date.strftime('%d/%m/%Y %H:%M')}")
+
+        # Show delivery date only if already delivered
+        if self._delivery_date:
+            print(f"  Delivered    : {self._delivery_date.strftime('%d/%m/%Y %H:%M')}")
+
+        print(f"\n  --- CLIENT ---")
+        self._client.display_info()
+
+        print(f"\n  --- COURIER ---")
+        self._courier.display_info()
+
+        print(f"\n  --- PARCEL ---")
+        self._parcel.display_info()
+
+        print(f"\n  --- ADDRESSES ---")
+        print(f"  Pickup       : {self._pickup_address}")
+        print(f"  Drop-off     : {self._drop_address}")
+
+        print(f"\n  --- FEE ---")
+        print(f"  Total Fee    : {self._total_fee:,.0f} FCFA")
+        print(f"  {'='*45}\n")
+
+    def to_file_string(self) -> str:
+        """
+        Formats the delivery as a pipe-separated string for file storage.
+
+        Returns:
+            str: A single line representing this delivery.
+        """
+        # Format : ID | date | client | courier | status | fee
+        return (f"{self._delivery_id}|"
+                f"{self._creation_date.strftime('%d/%m/%Y %H:%M')}|"
+                f"{self._client.get_first_name()} {self._client.get_last_name()}|"
+                f"{self._courier.get_first_name()} {self._courier.get_last_name()}|"
+                f"{self._parcel.get_description()}|"
+                f"{self._status}|"
+                f"{self._total_fee:.0f} FCFA")
+
+    def __str__(self) -> str:
+        """Returns a short string representation of the delivery."""
+        return (f"[DELIVERY] {self._delivery_id} — "
+                f"{self._client.get_first_name()} {self._client.get_last_name()} — "
+                f"{self._status.upper()}")
+
