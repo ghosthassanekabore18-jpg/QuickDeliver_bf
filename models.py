@@ -216,176 +216,184 @@ class Courier(Person):
         availability = "Available" if self._available else "Busy"
         return f"[COURIER] {self._first_name} {self._last_name} — {self._zone} — {availability}"
 
-# Fichiers concernés : models.py (classe) + menu.py (fonctions d'affichage)
 # =============================================================================
+# CHEICK - Client Class (extends Person)
+# Files: models.py (class) + menu.py (display functions)
+# =============================================================================
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PART 1 : Paste this into models.py (after Nimatou's Person class)
+# ─────────────────────────────────────────────────────────────────────────────
+
 class Client(Person):
-    """Représente un client du service de livraison QuickDeliver_BF.
-    
-    Hérite de la classe Person. Ajoute une adresse, un identifiant unique
-    et un historique des commandes passées.
+    """Represents a customer of the QuickDeliver_BF delivery service.
+
+    Inherits from the Person class. Adds a delivery address, a unique
+    client ID, and an order history.
     """
 
     def __init__(self, first_name: str, last_name: str, phone: str,
                  email: str, address: str, client_id: str):
-        """Initialise un objet Client.
+        """Initializes a Client object.
 
         Args:
-            first_name (str): Prénom du client.
-            last_name (str): Nom de famille du client.
-            phone (str): Numéro de téléphone.
-            email (str): Adresse email.
-            address (str): Adresse de livraison du client.
-            client_id (str): Identifiant unique du client (ex: CLT001).
+            first_name (str): Client's first name.
+            last_name (str): Client's last name.
+            phone (str): Phone number.
+            email (str): Email address.
+            address (str): Client's delivery address.
+            client_id (str): Unique client identifier (e.g. CLT001).
         """
-        # Appel du constructeur de la classe parent Person
+        # Call the parent class constructor (Person)
         super().__init__(first_name, last_name, phone, email)
 
-        # Attributs privés propres à Client
+        # Private attributes specific to Client
         self._address: str = address
         self._client_id: str = client_id
-        self._order_history: list = []  # Liste des commandes passées
+        self._order_history: list = []  # List of past orders
 
     # ── Getters ──────────────────────────────────────────────────────────────
 
     def get_address(self) -> str:
-        """Retourne l'adresse du client."""
+        """Returns the client's delivery address."""
         return self._address
 
     def get_client_id(self) -> str:
-        """Retourne l'identifiant unique du client."""
+        """Returns the client's unique identifier."""
         return self._client_id
 
     def get_order_history(self) -> list:
-        """Retourne la liste des commandes du client."""
+        """Returns the list of the client's orders."""
         return self._order_history
 
     # ── Setters ──────────────────────────────────────────────────────────────
 
     def set_address(self, new_address: str):
-        """Met à jour l'adresse du client.
+        """Updates the client's delivery address.
 
         Args:
-            new_address (str): Nouvelle adresse de livraison.
+            new_address (str): New delivery address.
         """
         self._address = new_address
 
-    # ── Méthodes ─────────────────────────────────────────────────────────────
+    # ── Methods ──────────────────────────────────────────────────────────────
 
     def add_order(self, order_id: str):
-        """Ajoute une commande à l'historique du client.
+        """Adds an order to the client's order history.
 
         Args:
-            order_id (str): Identifiant de la commande à ajouter.
+            order_id (str): The order identifier to add.
         """
         self._order_history.append(order_id)
-        print(f"✅ Commande {order_id} ajoutée pour {self.get_first_name()}.")
+        print(f"✅ Order {order_id} added for {self.get_first_name()}.")
 
     def display_order_history(self):
-        """Affiche toutes les commandes passées par le client."""
-        print(f"\n📦 Historique des commandes de {self.get_first_name()} {self.get_last_name()}:")
+        """Displays all orders placed by the client."""
+        print(f"\n📦 Order history for {self.get_first_name()} {self.get_last_name()}:")
         if not self._order_history:
-            print("   Aucune commande enregistrée.")
+            print("   No orders recorded yet.")
         else:
             for i, order in enumerate(self._order_history, start=1):
                 print(f"   {i}. {order}")
 
     def display_info(self):
-        """Affiche les informations complètes du client.
-        
-        Surcharge la méthode display_info() de la classe Person
-        en ajoutant l'adresse et l'identifiant client.
+        """Displays the full information of the client.
+
+        Overrides the display_info() method from the Person class
+        by adding the address and client ID.
         """
-        # On appelle d'abord display_info() du parent (Person)
+        # Call the parent's display_info() first (Person)
         super().display_info()
-        # Puis on ajoute les infos spécifiques au Client
-        print(f"   ID Client    : {self._client_id}")
-        print(f"   Adresse      : {self._address}")
-        print(f"   Nb commandes : {len(self._order_history)}")
+        # Then add Client-specific information
+        print(f"   Client ID    : {self._client_id}")
+        print(f"   Address      : {self._address}")
+        print(f"   Total orders : {len(self._order_history)}")
 
     def __str__(self) -> str:
-        """Retourne une représentation textuelle du client."""
+        """Returns a text representation of the client."""
         return (f"Client [{self._client_id}] - "
                 f"{self.get_first_name()} {self.get_last_name()} - "
                 f"{self._address}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PARTIE 2 :  (fonctions pour le menu principal)
+# PART 2 : Paste this into menu.py (functions for the main menu)
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Liste globale qui stocke tous les clients créés
+# Global list that stores all created clients
 clients: list = []
 
 
 def input_client():
-    """Demande à l'utilisateur de saisir les informations d'un nouveau client
-    et l'ajoute à la liste des clients.
+    """Asks the user to enter information for a new client
+    and adds them to the clients list.
     """
     print("\n" + "=" * 40)
-    print("      AJOUTER UN NOUVEAU CLIENT")
+    print("        ADD A NEW CLIENT")
     print("=" * 40)
 
-    # Saisie des informations
-    first_name: str = input("Prénom       : ").strip()
-    last_name: str  = input("Nom          : ").strip()
-    phone: str      = input("Téléphone    : ").strip()
+    # User input
+    first_name: str = input("First name   : ").strip()
+    last_name: str  = input("Last name    : ").strip()
+    phone: str      = input("Phone        : ").strip()
     email: str      = input("Email        : ").strip()
-    address: str    = input("Adresse      : ").strip()
+    address: str    = input("Address      : ").strip()
 
-    # Génération automatique de l'ID client
-    client_id: str = f"CLT{len(clients) + 1:03d}"  # Ex: CLT001, CLT002...
+    # Automatically generate the client ID
+    client_id: str = f"CLT{len(clients) + 1:03d}"  # e.g. CLT001, CLT002...
 
-    # Création de l'objet Client
+    # Create the Client object
     new_client = Client(first_name, last_name, phone, email, address, client_id)
 
-    # Ajout à la liste globale
+    # Add to the global list
     clients.append(new_client)
 
-    print(f"\n✅ Client {client_id} créé avec succès !")
+    print(f"\n✅ Client {client_id} successfully created!")
     return new_client
 
 
 def display_all_clients():
-    """Affiche la liste de tous les clients enregistrés."""
+    """Displays the list of all registered clients."""
     print("\n" + "=" * 40)
-    print("       LISTE DE TOUS LES CLIENTS")
+    print("        ALL REGISTERED CLIENTS")
     print("=" * 40)
 
     if not clients:
-        print("Aucun client enregistré pour le moment.")
+        print("No clients registered yet.")
     else:
         for client in clients:
             client.display_info()
             print("-" * 40)
 
-    print(f"\nTotal : {len(clients)} client(s)")
+    print(f"\nTotal: {len(clients)} client(s)")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PARTIE 3 : Test rapide (à supprimer avant soumission finale)
-# Utile pour vérifier que le code fonctionne correctement
+# PART 3 : Quick test (remove before final submission)
+# Useful to verify your code works correctly
 # ─────────────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
 
-    # Création de 2 objets Client pour tester
+    # Create 2 Client objects for testing
     client1 = Client("Aminata", "Ouedraogo", "70001122", "aminata@gmail.com",
-                     "Secteur 10, Ouagadougou", "CLT001")
+                     "Sector 10, Ouagadougou", "CLT001")
 
     client2 = Client("Ibrahim", "Kabore", "76543210", "ibrahim@yahoo.fr",
-                     "Secteur 4, Bobo-Dioulasso", "CLT002")
+                     "Sector 4, Bobo-Dioulasso", "CLT002")
 
-    # Test de display_info() — polymorphisme visible ici
+    # Test display_info() — polymorphism visible here
     client1.display_info()
     print()
     client2.display_info()
 
-    # Test de add_order() et display_order_history()
+    # Test add_order() and display_order_history()
     client1.add_order("ORD001")
     client1.add_order("ORD002")
     client1.display_order_history()
 
-    # Test de __str__()
+    # Test __str__()
     print()
     print(str(client1))
     print(str(client2))
